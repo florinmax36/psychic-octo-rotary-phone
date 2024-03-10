@@ -1,0 +1,105 @@
+﻿@addTagHelper *, BundlerMinifier.TagHelpers
+@model BTCPayServer.Controllers.WalletReceiveViewModel
+@{
+    Layout = "../Shared/_NavLayout.cshtml";
+    ViewData.SetActivePageAndTitle(WalletsNavPages.Receive, $"Receive {Model.CryptoCode}", Context.GetStoreData().StoreName);
+}
+
+<div class="row no-gutters">
+    <div class="col-lg-8 mx-auto my-auto">
+        <form method="post" asp-action="WalletReceive" class="card text-center">
+            <div class="card-body">
+                @if (string.IsNullOrEmpty(Model.Address))
+                {
+                    <h3 class="card-title mb-3">@ViewData["PageTitle"]</h3>
+                    <button id="generateButton" class="btn btn-lg btn-primary" type="submit" name="command" value="generate-new-address">Generate @Model.CryptoCode address</button>
+                }
+                else
+                {
+                    <h3 class="card-title mb-4">Next available @Model.CryptoCode&nbsp;address</h3>
+                    <noscript>
+                        <div class="card-body m-sm-0 p-sm-0">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control " readonly="readonly" asp-for="Address" id="address"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text fa fa-copy"> </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" readonly="readonly" asp-for="PaymentLink" id="payment-link"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text fa fa-copy"> </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12 col-sm-6">
+                                    <button type="submit" name="command" value="generate-new-address" class="btn btn-primary w-100">Generate another address</button>
+                                </div>
+                                <div class="col-12 col-sm-6 mt-4 mt-sm-0">
+                                    <button type="submit" name="command" value="unreserve-current-address" class="btn btn-secondary w-100">Unreserve this address</button>
+                                </div>
+                            </div>
+                        </div>
+                    </noscript>
+                    <div class="only-for-js card-body m-sm-0 p-sm-0" id="app">
+                        <div class="qr-container mb-4">
+                            <img src="@Model.CryptoImage" class="qr-icon"/>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane show active" id="link-tab" role="tabpanel">
+                                    <vc:qr-code data="@Model.PaymentLink"/>
+                                </div>
+                                <div class="tab-pane" id="address-tab" role="tabpanel">
+                                    <vc:qr-code data="@Model.Address"/>
+                                </div>
+                            </div>
+                            <div class="nav justify-content-center">
+                                <a class="nav-link active" data-toggle="tab" href="#link-tab">Link</a>
+                                <a  class="nav-link" data-toggle="tab" href="#address-tab">Address</a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group" data-clipboard="@Model.Address">
+                                <input type="text" class="form-control" style="cursor: copy" readonly="readonly" value="@Model.Address" id="address"/>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-outline-secondary" data-clipboard-confirm>Copy address</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group" data-clipboard="@Model.PaymentLink">
+                                <input type="text" class="form-control" style="cursor: copy" readonly="readonly" value="@Model.PaymentLink" id="payment-link"/>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-outline-secondary" data-clipboard-confirm>Copy link</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-12 col-sm-6">
+                                <button type="submit" name="command" value="generate-new-address" class="btn btn-primary w-100">Generate another address</button>
+                            </div>
+                            <div class="col-12 col-sm-6 mt-4 mt-sm-0">
+                                <button type="submit" name="command" value="unreserve-current-address" class="btn btn-secondary w-100">Unreserve this address</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+@section HeadScripts
+{
+    <link href="~/main/qrcode.css" rel="stylesheet" asp-append-version="true"/>
+    <script src="~/js/copy-to-clipboard.js"></script>
+    <script>
+        window.onload = function (){        
+            document.querySelectorAll('[data-clipboard]').forEach(value => value.addEventListener('click', window.copyToClipboard));
+        }
+        </script>
+}

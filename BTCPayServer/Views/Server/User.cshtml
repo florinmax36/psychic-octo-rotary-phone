@@ -1,0 +1,18 @@
+﻿@model UsersViewModel.UserViewModel
+@{
+    ViewData.SetActivePageAndTitle(ServerNavPages.Users, Model.Email);
+}
+
+<h2 class="mb-4">@ViewData["PageTitle"]</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="IsAdmin">Is admin</label>
+                <input asp-for="IsAdmin" type="checkbox" class="btcpay-toggle ml-2"/>
+            </div>
+            <button name="command" type="submit" class="btn btn-primary" value="Save">Save</button>
+        </form>
+    </div>
+</div>

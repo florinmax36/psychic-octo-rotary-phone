@@ -1,0 +1,67 @@
+﻿@addTagHelper *, BundlerMinifier.TagHelpers
+@inject BTCPayServer.HostedServices.CssThemeManager themeManager
+
+@model BTCPayServer.Controllers.ShowLightningNodeInfoViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@Model.StoreName – @Model.CryptoCode Lightning Node</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="~/img/icons/icon-512x512.png" asp-append-version="true">
+    <link rel="apple-touch-startup-image" href="~/img/splash.png" asp-append-version="true">
+    <link rel="manifest" href="~/manifest.json">
+    <link href="@Context.Request.GetRelativePathOrAbsolute(themeManager.BootstrapUri)" rel="stylesheet" asp-append-version="true" />
+    <link href="@Context.Request.GetRelativePathOrAbsolute(themeManager.ThemeUri)" rel="stylesheet" asp-append-version="true" />
+    <link href="~/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/main/qrcode.css" rel="stylesheet" asp-append-version="true" />
+    <script src="~/js/copy-to-clipboard.js"></script>
+    <script>
+    window.onload = function (){        
+        document.querySelectorAll('[data-clipboard]').forEach(value => value.addEventListener('click', window.copyToClipboard));
+    }
+    </script>
+</head>
+<body>
+    <div id="app" class="container">
+        <div class="row" style="height:100vh">
+            <div class="col-md-8 col-sm-12 col-lg-6 mx-auto my-auto">
+                <div class="card border-0">
+                    <div class="card-body p-4">
+                        <h1 class="card-title text-center">@Model.StoreName</h1>
+                        <h2 class="card-subtitle text-center text-secondary mb-2">
+                            <span>@Model.CryptoCode</span>
+                            Lightning Node
+                        </h2>
+                        <h3 class="card-title text-center">
+                            <span>
+                                @(Model.Available ? "Online" : "Unavailable")
+                            </span>
+                            <small class="text-@(Model.Available ? "success" : "danger")" >
+                                <span class="fa fa-circle"></span>
+                            </small>
+                        </h3>
+                        @if (Model.Available)
+                        {
+                            <div class="qr-container my-3">
+                                <img  alt="@Model.CryptoCode" class="qr-icon" src="@Model.CryptoImage" />
+                                <vc:qr-code data="@Model.NodeInfo"> </vc:qr-code>
+                            </div>
+                            <div class="input-group  d-flex" data-clipboard="@Model.NodeInfo">
+                                <input type="text" class="form-control" style="cursor: copy" readonly="readonly" value="@Model.NodeInfo" id="peer-info"/>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-outline-secondary" data-clipboard-confirm>Copy node info</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

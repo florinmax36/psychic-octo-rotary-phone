@@ -1,0 +1,31 @@
+﻿@model LightningWalletServices
+@{
+    ViewData.SetActivePageAndTitle(ServerNavPages.Services, "BTCPay Server Configurator");
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group">
+            <p>
+                <span>This page exposes information to use the configured BTCPay Server Configurator to modify this setup.</span>
+            </p>
+        </div>
+       
+            <a href="@Model.ServiceLink" target="_blank" class="form-group">
+                <label>Service</label>
+                <input asp-for="ServiceLink" readonly class="form-control" />
+            </a>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

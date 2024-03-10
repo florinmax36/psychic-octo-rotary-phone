@@ -1,0 +1,43 @@
+@model IndexViewModel
+@{
+    ViewData.SetActivePageAndTitle(ManageNavPages.Index, "Profile");
+}
+
+<form method="post">
+    @if (!ViewContext.ModelState.IsValid)
+    {
+        <div asp-validation-summary="All" class="text-danger"></div>
+    }
+
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="Username"></label>
+            <input asp-for="Username" class="form-control" disabled/>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" class="form-control"/>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3 d-flex align-items-end">
+            @if (Model.IsEmailConfirmed)
+            {
+                <span class="badge badge-success p-2 my-1">
+                    <span class="fa fa-check"></span>
+                    confirmed
+                </span>
+            }
+            else
+            {
+                <button asp-action="SendVerificationEmail" class="btn btn-secondary">Send verification email</button>
+            }
+        </div>
+    </div>
+    <button type="submit" id="save" class="btn btn-primary">Save</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

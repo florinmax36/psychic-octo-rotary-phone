@@ -1,0 +1,53 @@
+﻿@model BTCPayServer.Models.ServerViewModels.MaintenanceViewModel
+@{
+    ViewData.SetActivePageAndTitle(ServerNavPages.Maintenance, "Maintenance");
+}
+
+<h2 class="mb-4">@ViewData["PageTitle"]</h2>
+
+<form method="post">
+    <div class="row mb-5">
+        <div class="col-lg-9 col-xl-8">
+            <h4 class="mb-3">Change domain name</h4>
+            <p>You can change the domain name of your server by following <a href="https://docs.btcpayserver.org/ChangeDomain" target="_blank">this guide</a>.</p>
+
+            <div class="form-group">
+                <div class="form-inline">
+                    <input asp-for="DNSDomain" class="form-control flex-fill" disabled="@(Model.CanUseSSH ? null : "disabled")" />
+                    <button name="command" type="submit" class="btn btn-primary mt-2 mt-sm-0 ml-sm-2" value="changedomain" title="Change domain" disabled="@(Model.CanUseSSH ? null : "disabled")">
+                        <span class="fa fa-check"></span> Confirm
+                    </button>
+                </div>
+                <span asp-validation-for="DNSDomain" class="text-danger"></span>
+            </div>
+
+            <h4 class="mt-5 mb-3">Update</h4>
+            <p class="text-secondary">Update to the latest version of BTCPay server.</p>
+            <div class="form-group">
+                <div class="input-group">
+                    <button name="command" type="submit" class="btn btn-primary" value="update" disabled="@(Model.CanUseSSH ? null : "disabled")">Update</button>
+                </div>
+            </div>
+            
+            <h4 class="mt-5 mb-3">Restart</h4>
+            <p class="text-secondary">Restart BTCPay server and related services.</p>
+            <div class="form-group">
+                <div class="input-group">
+                    <button name="command" type="submit" class="btn btn-primary" value="restart" disabled="@(Model.CanUseSSH ? null : "disabled")">Restart</button>
+                </div>
+            </div>
+
+            <h4 class="mt-5 mb-3">Clean</h4>
+            <p class="text-secondary">Delete unused docker images present on your system.</p>
+            <div class="form-group">
+                <div class="input-group">
+                    <button name="command" type="submit" class="btn btn-secondary" value="clean" disabled="@(Model.CanUseSSH ? null : "disabled")">Clean</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

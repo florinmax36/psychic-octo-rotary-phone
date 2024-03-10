@@ -1,0 +1,16 @@
+@model BTCPayServer.Models.AppViewModels.ViewPointOfSaleViewModel
+@{
+    Layout = "_LayoutPos";
+}
+
+@if (Context.Request.Query.ContainsKey("simple"))
+{
+    <partial name="/Views/AppsPublic/PointOfSale/MinimalLight.cshtml" model="Model" />
+}
+else
+{
+    <noscript>
+        <partial name="/Views/AppsPublic/PointOfSale/MinimalLight.cshtml" model="Model" />
+    </noscript>
+    <partial name="/Views/AppsPublic/PointOfSale/VueLight.cshtml" model="Model" />
+}
